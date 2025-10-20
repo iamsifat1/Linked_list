@@ -27,9 +27,11 @@ int main(){
     Node* tmp = head;
     while (tmp != NULL)
     {
-        cout << tmp->val << "\n";
+        cout << tmp->val << " ";
         tmp = tmp->next;
     }
+    cout << "\n";
 
     return 0;
+
 }
