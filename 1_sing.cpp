@@ -14,7 +14,7 @@ class Node{
 void insert_at_head(Node* &head, Node* &tail, int x);
 void insert_at_tail(Node* &head, Node* &tail, int val);
 void insert_at_anyPos(Node* &head, Node* &tail, int pos, int val);
-void delete_head(Node* &head);
+void delete_head(Node* &head, Node* &tail);
 void delete_at_tail(Node* &head, Node* &tail);
 void delete_anypos(Node* &head, Node* &tail, int x);
 void print_link_list(Node* head);
@@ -24,15 +24,16 @@ int main(){
     Node* head = NULL;
     Node* tail = NULL;
     cout << "Enter values for list. Or enter -1 to stop :  ";
+    int x; 
     while (true)
     {
-        int x;  cin >> x;
+        cin >> x;
         if(x == -1)break;
         insert_at_tail(head, tail, x);
     }
 
     print_link_list(head);
-    int q, x;
+    int q, val;
     do
     {
         cout << "***************************************************\n1. insert at head\n2. insert at tail\n3. insert at any position\n4. delete at head\n5. delete at tail\n6. delete at any position\n      0 to exit\n***************************************************\n";
@@ -41,26 +42,26 @@ int main(){
         {
         case 1:
             cout << "1 selected . Enter value :";
-            cin >> x;
-            insert_at_head(head,tail,x);
+            cin >> val;
+            insert_at_head(head,tail,val);
             print_link_list(head);
             break;
         case 2:
             cout << "2 selected . Enter value :";
-            cin >> x;
-            insert_at_tail(head, tail, x);
+            cin >> val;
+            insert_at_tail(head, tail, val);
             print_link_list(head);
             break;
         case 3:
-            cout << "3 selected . Enter value and position:";
-            cin >> x;
-            int pos;  cin >> pos;
-            insert_at_anyPos(head,tail,pos,x);
+            cout << "3 selected. Enter position and value: ";
+            int pos;
+            cin >> pos >> val;
+            insert_at_anyPos(head,tail,pos,val);
             print_link_list(head);
             break;
         case 4:
             cout << "4 selected.\n";
-            delete_head(head);
+            delete_head(head, tail);
             print_link_list(head);
             break;
         case 5:
@@ -70,8 +71,8 @@ int main(){
             break;
         case 6:
             cout << "6 selected. Enter position to delete: ";
-            cin >> x;
-            delete_anypos(head,tail, x);
+            cin >> pos;
+            delete_anypos(head,tail, pos);
             print_link_list(head);
             break;
         default:
@@ -86,21 +87,11 @@ int main(){
 
 
 
-void insert_at_tail(Node* &head, Node* &tail, int val){
+
+
+
+void insert_at_head(Node* &head, Node* &tail, int val){
     Node* newnode = new Node(val);
-
-        if(head == NULL){
-            head = newnode;
-            tail = newnode;
-            return;
-        }else{
-            tail->next = newnode;
-            tail = newnode;
-        }
-}
-
-void insert_at_head(Node* &head,Node* &tail, int x){
-    Node* newnode = new Node(x);
     if(head == NULL){
         head = newnode;
         tail = newnode;
@@ -110,6 +101,20 @@ void insert_at_head(Node* &head,Node* &tail, int x){
     head = newnode;
 }
 
+void insert_at_tail(Node* &head, Node* &tail, int val){
+    Node* newnode = new Node(val);
+
+    if(head == NULL){
+        head = newnode;
+        tail = newnode;
+        return;
+    }
+    tail->next = newnode;
+    tail = newnode;
+        
+}
+
+
 void insert_at_anyPos(Node* &head, Node* &tail, int pos, int val) {
     if (pos == 0) {
         insert_at_head(head, tail, val);
@@ -117,24 +122,26 @@ void insert_at_anyPos(Node* &head, Node* &tail, int pos, int val) {
     }
 
     Node* tmp = head;
-    for (int i = 1; i < pos && tmp != NULL; i++) {
+    for (int i = 0; i < pos-1 && tmp != NULL; i++) {
         tmp = tmp->next;
     }
     if (tmp == NULL) {
         cout << "Out of the boundary.\n";
         return;
     }
+    if(tmp->next == NULL){
+        insert_at_tail(head,tail,val);
+        return;
+    }
 
     Node* newnode = new Node(val);
     newnode->next = tmp->next;
     tmp->next = newnode;
-
-    if (newnode->next == NULL) tail = newnode;
 }
 
 
 
-void delete_head(Node* &head){
+void delete_head(Node* &head, Node* &tail){
         Node* deletenode = head;
         if(head == NULL){
             cout <<"List has no data\n";
@@ -142,6 +149,8 @@ void delete_head(Node* &head){
         }
         head = head->next;
         delete deletenode;
+        if(head == NULL) tail = NULL;
+
 }
 
 
@@ -153,8 +162,7 @@ void delete_at_tail(Node* &head, Node* &tail){
         }
         if(tmp->next == NULL){
             Node* deletenode = tmp;
-            head = NULL;
-            tail = NULL;
+            head = NULL;  tail = NULL;
             delete deletenode;
             return;
         }
@@ -168,21 +176,20 @@ void delete_at_tail(Node* &head, Node* &tail){
         delete deletenode;
         tail = tmp;
 
-
 }
+
 void delete_anypos(Node* &head, Node* &tail, int pos) {
     if (head == NULL) {
         cout << "List has no data\n";
         return;
     }
     if (pos == 0) {
-        delete_head(head);
-        if (head == NULL) tail = NULL;
+        delete_head(head,tail);
         return;
     }
 
     Node* tmp = head;
-    for (int i = 1; i < pos && tmp->next != NULL; i++) {
+    for (int i = 0; i < pos-1 && tmp->next != NULL; i++) {
         tmp = tmp->next;
     }
 
