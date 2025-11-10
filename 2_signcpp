@@ -13,7 +13,7 @@ public:
 
 void insert_at_tail(Node* &head, Node* &tail, int val);
 void print_link_list(Node* head);
-bool search_element(Node* head, int key);
+bool search_element(Node* head, int val);
 void display_greater_less(Node* head, int val);
 void reverse_traversal(Node* head);
 void find_max_min(Node* head);
@@ -23,8 +23,8 @@ int main() {
     Node* tail = NULL;
 
     cout << "Enter values for the list (enter -1 to stop): ";
+    int x;
     while (true) {
-        int x;
         cin >> x;
         if (x == -1) break;
         insert_at_tail(head, tail, x);
@@ -33,7 +33,7 @@ int main() {
     cout << "\nLinked list created successfully:\n";
     print_link_list(head);
 
-    int q;
+    int q, val;
     do {
         cout << "\n***************************************************\n";
         cout << "1. Search for an element\n";
@@ -46,33 +46,27 @@ int main() {
         cin >> q;
 
         switch (q) {
-        case 1: {
-            int key;
+        case 1:
             cout << "Enter value to search: ";
-            cin >> key;
-            if (search_element(head, key))
-                cout << key << " found in the list.\n";
+            cin >> val;
+            if (search_element(head, val))
+                cout << val << " found in the list.\n";
             else
-                cout << key << " not found in the list.\n";
+                cout << val << " not found in the list.\n";
             break;
-        }
-        case 2: {
-            int val;
+        case 2:
             cout << "Enter value to compare: ";
             cin >> val;
             display_greater_less(head, val);
             break;
-        }
-        case 3: {
+        case 3:
             cout << "Reverse traversal: ";
             reverse_traversal(head);
             cout << "\n";
             break;
-        }
-        case 4: {
+        case 4: 
             find_max_min(head);
             break;
-        }
         case 0:
             cout << "Exit success.\n";
             break;
@@ -108,18 +102,21 @@ void print_link_list(Node* head) {
     cout << "\nLength: " << cnt << "\n";
 }
 
-bool search_element(Node* head, int key) {
+bool search_element(Node* head, int val) {
     Node* temp = head;
     int ind = 1;
+    bool found = false;
     while (temp != NULL) {
-        if (temp->val == key){
-            cout << ind << " ";
+        if (temp->val == val){
+            cout << "Found at position: " << ind << "\n";
+            found = true;
         }
         ind++;
         temp = temp->next;
     }
-    return false;
+    return found;
 }
+
 
 void display_greater_less(Node* head, int val) {
     Node* temp = head;
@@ -151,9 +148,10 @@ void display_greater_less(Node* head, int val) {
 }
 
 void reverse_traversal(Node* head) {
-    if (head == NULL) return;
-    reverse_traversal(head->next);
-    cout << head->val << " ";
+    Node* tmp = head;
+    if (tmp == NULL) return;
+    reverse_traversal(tmp->next);
+    cout << tmp->val << " ";
 }
 
 void find_max_min(Node* head) {
